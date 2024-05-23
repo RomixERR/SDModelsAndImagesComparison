@@ -67,6 +67,7 @@ def generate_reports(models, images):
     hash_to_model = {hash_val: name for name, hash_val in models.items()}
     model_to_images = {name: [] for name in models}
     unmatched_images = []
+    unmatched_images_hash = []
 
     for image, hash_val in images.items():
         if hash_val in hash_to_model:
@@ -74,13 +75,14 @@ def generate_reports(models, images):
             model_to_images[model_name].append(image)
         else:
             unmatched_images.append(image)
+            unmatched_images_hash.append(hash_val)
 
     sorted_models = sorted(model_to_images.items(), key=lambda x: len(x[1]), reverse=True)
 
     print("Summary Report:")
     for model, image_list in sorted_models:
         print(f"{model}, {models[model]}, {len(image_list)} images")
-
+    if input("You need detailed report? Input n for exit ") == 'n': exit(0)
     print("\nDetailed Report:")
     for model, image_list in sorted_models:
         print(f"{model}, {models[model]}, {len(image_list)} images")
@@ -89,8 +91,8 @@ def generate_reports(models, images):
 
     if unmatched_images:
         print("\nUnmatched Images:")
-        for image in unmatched_images:
-            print(f"\t{image}")
+        for i in range(len(unmatched_images)):
+            print(f"\t{unmatched_images[i]}\tHash: {unmatched_images_hash[i]}")
 
 
 if __name__ == "__main__":
