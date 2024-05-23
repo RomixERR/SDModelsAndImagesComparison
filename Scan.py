@@ -37,7 +37,6 @@ def scan_directory_for_models(directory):
         for file in files:
             if file.endswith(('.safetensors', '.ckpt')):
                 all_files.append(os.path.join(root, file))
-    print(all_files)
     for filepath in tqdm(all_files, desc="Scanning Models"):
         hash_value = calculate_sha256(filepath)
         if hash_value:
@@ -97,7 +96,12 @@ def generate_reports(models, images):
 if __name__ == "__main__":
     models_directory = input("Enter the path to the models directory: ")
     images_directory = input("Enter the path to the images directory: ")
-
+    if not os.path.exists(models_directory):
+        print('models directory missing!')
+        exit(1)
+    if not os.path.exists(images_directory):
+        print('images directory missing!')
+        exit(1)
     models = scan_directory_for_models(models_directory)
     images = scan_directory_for_images(images_directory)
 
